@@ -13,6 +13,8 @@
  * limitations under the License.
  */
 
+import XRRay from './XRRay';
+
 import { mat4_identity } from '../math';
 
 const PRIVATE = Symbol('@@webxr-polyfill/XRInputPose');
@@ -20,13 +22,13 @@ const PRIVATE = Symbol('@@webxr-polyfill/XRInputPose');
 export default class XRInputPose {
   /**
    * @param {boolean} emulatedPosition
-   * @param {Float32Array} pointerMatrix
    * @param {Float32Array} gripMatrix
    */
   constructor(inputSourceImpl, hasGripMatrix) {
+
+    this.targetRay = new XRRay();
     this[PRIVATE] = {
       inputSourceImpl,
-      pointerMatrix: mat4_identity(new Float32Array(16)),
       gripMatrix: hasGripMatrix ? mat4_identity(new Float32Array(16)) : null,
     };
   }
@@ -35,11 +37,6 @@ export default class XRInputPose {
    * @return {boolean}
    */
   get emulatedPosition() { return this[PRIVATE].inputSourceImpl.emulatedPosition; }
-
-  /**
-   * @return {Float32Array}
-   */
-  get pointerMatrix() { return this[PRIVATE].pointerMatrix; }
 
   /**
    * @return {Float32Array}
